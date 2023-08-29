@@ -101,7 +101,7 @@ def archivo_salida():
     print("------------------------------------------------------------")
     print("               ESCRIBIR ARCHIVO DE SALIDA                   ")
     print("------------------------------------------------------------")
-    nombre_archivo = input("Nombre para asignarle al archivo: ")
+    nombre_archivo = input("Escribir una ruta específica con el nombre a asignar al archivo (omitir extensión): ")
     lista_senales_temp.generar_xml_salida(nombre_archivo)
     print("El archivo se ha escrito con éxito")
 
@@ -115,8 +115,6 @@ def generar_Graficas():
     print("------------------------------------------------------------")
     nombre = input("Ingrese el nombre de la señal que desea graficar: ")
     lista_senales_temp.grafica_lista_original(nombre)
-
-
     validacion_opcion()
 
 def inicializar_sistema():

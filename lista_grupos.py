@@ -3,8 +3,8 @@ import sys
 import os
 
 def separar_cadena(cadena, delimitador):
-    numeros = []  # Lista para almacenar los números resultantes
-    num_actual = ""  # Cadena para construir el número actual
+    numeros = []  # números resultantes
+    num_actual = ""  
     for c in cadena:
         if c == delimitador:
             if num_actual:

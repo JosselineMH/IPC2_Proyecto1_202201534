@@ -41,26 +41,19 @@ class lista_patrones:
 
   
   def encontrar_coincidencias(self):
-    resultado = ""  # Inicializa un string vacío para almacenar el resultado final  
-    # Bucle principal que se ejecuta mientras haya nodos en la lista
+    resultado = ""  #almacena el resultado final  
+    #se ejecuta mientras haya nodos en la lista
     while self.primero:
-      actual = self.primero  # Comienza desde el primer nodo en la lista
-      temp_string = ""  # String temporal para almacenar niveles coincidentes
-      temp_tiempos = ""  # Lista temporal para almacenar niveles      
-      # Bucle interno para recorrer la lista de nodos y buscar coincidencias
-      
+      actual = self.primero 
+      temp_tiempos = ""  # Lista temporal para almacenar tiempos      
       while actual:
         if actual.patron.cadena_patron == self.primero.patron.cadena_patron:
-          temp_tiempos+=(str(actual.patron.tiempo))+","  # Agrega el nivel a la lista temporal
-          # Si no hay nodo siguiente, elimina el primer nodo
+          temp_tiempos+=(str(actual.patron.tiempo))+"," 
         actual=actual.siguiente
-      # Terminamos la iteración, quiere decir que ya tenemos la coincidencias:
       buffer=""
-      #print(temp_niveles)
       for digito in temp_tiempos:
         if digito.isdigit():
           buffer+=digito
-        #Quiere decir que viene una coma
         else:
           if buffer!="":
             self.eliminar(int(buffer))
@@ -68,4 +61,4 @@ class lista_patrones:
           else:
             buffer=""
       resultado+=temp_tiempos+"--"
-    return resultado  # Devuelve el resultado final con la agrupación de niveles
+    return resultado  

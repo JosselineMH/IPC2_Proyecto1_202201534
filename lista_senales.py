@@ -4,58 +4,34 @@ from lista_grupos import lista_grupos
 import xml.etree.ElementTree as ET
 
 
-def separar_cadena(cadena, delimitador):
+def separar_cadena(cadena, separadpr):
     numeros = []  # Lista para almacenar los números resultantes
     num_actual = ""  # Cadena para construir el número actual
-    for c in cadena:
-        if c == delimitador:
+    for caracter in cadena:
+        if caracter == separadpr:
             if num_actual:
                 numeros.append(int(num_actual))
                 num_actual = ""
         else:
-            num_actual += c
+            num_actual += caracter
     if num_actual:
         numeros.append(int(num_actual))
     return numeros
 
-def procesar_cadena1(cadena_grupo):
-    string_suma=""
-    subcadenas = []  # Inicializar subcadenas como una lista vacía
-    buffer = []  # Inicializar buffer como una lista vacía
-    suma_total = None
-
-    for digito in cadena_grupo:
-        if digito != "#":
-            subcadenas.append(digito)  # Agregar el dígito a la lista subcadenas
-        else:
-            for digito2 in subcadenas:
-                if digito2.isdigit():
-                    buffer.append(digito2)  # Agregar el dígito a la lista buffer
-            if suma_total is None:
-                suma_total = buffer.copy()  # Inicializar suma_total con una copia de buffer
-            else:
-                for i in range(len(buffer)):
-                    if buffer[i]:
-                        suma_total[i] = str(int(suma_total[i]) + int(buffer[i]))  # Sumar los valores correspondientes
-            subcadenas = []  # Reiniciar subcadenas para la siguiente iteración
-            buffer = []  # Reiniciar buffer para la siguiente iteración
-            string_suma+= str(suma_total)+"-"
-    #print("Realizando suma de tuplas...")
-    return "-".join(suma_total)
 
 def procesar_cadena(cadena):
     subcadenas = separar_cadena_reducida(cadena,"#")
     suma_total = None
 
     for subcadena in subcadenas:
-        valores = separar_cadena_reducida(subcadena,"/")
+        valor = separar_cadena_reducida(subcadena,"/")
         
         if suma_total is None:
-            suma_total = valores
+            suma_total = valor
         else:
-            for i in range(len(valores)):
-                if valores[i]:
-                    suma_total[i] = str(int(suma_total[i]) + int(valores[i]))
+            for i in range(len(valor)):
+                if valor[i]:
+                    suma_total[i] = str(int(suma_total[i]) + int(valor[i]))
 
     return "-".join(suma_total)
 
@@ -128,12 +104,12 @@ class lista_senales:
             nombre_senal = actual.senal.nombre
             amplitud = actual.senal.amplitud
             actual.senal.lista_patron_reducida = actual.senal.lista_patron_binario.devolver_patrones_por_tiempo(actual.senal.lista_patron_reducida)
-            actual.senal.lista_patron_reducida.recorrer_imprimir_patron()
+            #actual.senal.lista_patron_reducida.recorrer_imprimir_patron()
 
             lista_patrones_temporal=actual.senal.lista_patron_reducida
             grupos_sin_analizar=lista_patrones_temporal.encontrar_coincidencias()
 
-            print(grupos_sin_analizar)
+            #print(grupos_sin_analizar)
             buffer = ""
             for digito in grupos_sin_analizar:
 
@@ -147,7 +123,7 @@ class lista_senales:
                     buffer=""
                 else:
                     buffer=""
-            actual.senal.lista_grupos.recorrer_imprimir_grupo()
+            
             actual = actual.siguiente
 
     def generar_xml_salida(self, nombre_ruta):
@@ -160,7 +136,7 @@ class lista_senales:
             senal=ET.SubElement(senales_reducidas,"senal")
             senal.set("nombre",actual.senal.nombre)
             senal.set("A",actual.senal.amplitud)
-            #ListaGrupos------
+
             lista_grupo_temp=actual.senal.lista_grupos.primero
             contador_grupo=1
             while lista_grupo_temp!=None:
@@ -186,7 +162,6 @@ class lista_senales:
             actual=actual.siguiente
             contador_grupo=1
 
-        #Generar xml
         my_data=ET.tostring(senales_reducidas)
         my_data=str(my_data)
         self.xml_arreglado(senales_reducidas)
@@ -197,12 +172,10 @@ class lista_senales:
     def xml_arreglado(self, element, indent='  '):
         # Inicializar una cola con el elemento raíz y nivel de anidación 0
         queue = [(0, element)]  # (level, element)
-        # Bucle principal: continúa mientras haya elementos en la cola
         while queue:
             # Extraer nivel y elemento actual de la cola
             level, element = queue.pop(0)
-            # Crear tuplas para cada hijo con nivel incrementado
-            children = [(level + 1, child) for child in list(element)]
+            children = [(level+1, child) for child in list(element)]
             # Agregar saltos de línea e indentación al inicio del elemento actual
             if children:
                 element.text = '\n' + indent * (level + 1)
@@ -212,7 +185,6 @@ class lista_senales:
             else:
                 # Si este es el último elemento del nivel actual, reducir la indentación
                 element.tail = '\n' + indent * (level - 1)
-            # Insertar las tuplas de hijos al principio de la cola
             queue[0:0] = children
 
     

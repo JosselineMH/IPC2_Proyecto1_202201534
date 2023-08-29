@@ -48,14 +48,11 @@ class lista_datos:
         while actual != None:
             # Si mi fila actual es diferente a la que viene
             if  sentinela_de_filas!=actual.dato.tiempo:
-                #print(sentinela_de_filas,actual.celda.nivel,"hola")
                 sentinela_de_filas=actual.dato.tiempo
                 fila_iniciada=False
-                # Cerramos la fila
                 text+="""</TR>\n"""  
             if fila_iniciada==False:
                 fila_iniciada=True
-                #Abrimos la fila
                 text+="""<TR>"""  
                 text+="""<TD border="2"  bgcolor="purple:pink"  gradientangle="315">"""+str(actual.dato.valor)+"""</TD>\n"""
             else:
