@@ -46,18 +46,18 @@ class lista_patrones:
     while self.primero:
       actual = self.primero  # Comienza desde el primer nodo en la lista
       temp_string = ""  # String temporal para almacenar niveles coincidentes
-      temp_niveles = ""  # Lista temporal para almacenar niveles      
+      temp_tiempos = ""  # Lista temporal para almacenar niveles      
       # Bucle interno para recorrer la lista de nodos y buscar coincidencias
       
       while actual:
         if actual.patron.cadena_patron == self.primero.patron.cadena_patron:
-          temp_niveles+=(str(actual.patron.tiempo))+","  # Agrega el nivel a la lista temporal
+          temp_tiempos+=(str(actual.patron.tiempo))+","  # Agrega el nivel a la lista temporal
           # Si no hay nodo siguiente, elimina el primer nodo
         actual=actual.siguiente
       # Terminamos la iteración, quiere decir que ya tenemos la coincidencias:
       buffer=""
       #print(temp_niveles)
-      for digito in temp_niveles:
+      for digito in temp_tiempos:
         if digito.isdigit():
           buffer+=digito
         #Quiere decir que viene una coma
@@ -67,5 +67,5 @@ class lista_patrones:
             buffer=""
           else:
             buffer=""
-      resultado+=temp_niveles+"--"
+      resultado+=temp_tiempos+"--"
     return resultado  # Devuelve el resultado final con la agrupación de niveles

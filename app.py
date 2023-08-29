@@ -7,12 +7,10 @@ from lista_patrones import lista_patrones
 from lista_grupos import lista_grupos
 from dato import dato
 from senal import senal
-import logging
 
-logging.basicConfig(level=logging.DEBUG)
 source_archivo = ""
 lista_senales_temp = lista_senales()
-lista_grupos_temp = lista_grupos()
+
 
 def update_source(new_source):
     global source_archivo
@@ -49,57 +47,67 @@ def procesar_archivo():
         return
 
     try:
-        archivo_XML = open(source_archivo, "r")
-        archivo_XML.close()
+        with open(source_archivo, "r") as archivo:
 
-        tree = ET.parse(source_archivo)
-        raiz = tree.getroot()
+            tree = ET.parse(source_archivo)
+            raiz = tree.getroot()
 
-       
-    
+            for senal_temp in raiz.findall('senal'):
+                nombre_senal = senal_temp.get('nombre')
+                tiempo_senal = senal_temp.get('t')
+                amplitud_senal = senal_temp.get('A')
 
-        for senal_temp in raiz.findall('senal'):
-            nombre_senal = senal_temp.get('nombre')
-            tiempo_senal = senal_temp.get('t')
-            amplitud_senal = senal_temp.get('A')
+                lista_datos_temp = lista_datos()
+                lista_patronesbin_temp = lista_datos()
+                lista_patrones_matrizRed_temp = lista_patrones()
+                lista_grupos_temp = lista_grupos()
+        
+                for dato_senal in senal_temp.findall('dato'):
+                    tiempo_dato = dato_senal.get('t')
+                    amplitud_dato = dato_senal.get('A')
+                    valor_dato = dato_senal.text
+                    nuevo = dato(int(tiempo_dato), int(amplitud_dato), int(valor_dato))
+                    lista_datos_temp.insertar_dato(nuevo)
 
-            lista_datos_temp = lista_datos()
-            lista_patronesbin_temp = lista_datos()
-            lista_patrones_matrizRed_temp = lista_patrones()
-            #lista_grupos_temp = lista_grupos()
-            
-
-            for dato_senal in senal_temp.findall('dato'):
-                tiempo_dato = dato_senal.get('t')
-                amplitud_dato = dato_senal.get('A')
-                valor_dato = dato_senal.text
-                nuevo = dato(int(tiempo_dato), int(amplitud_dato), int(valor_dato))
-                lista_datos_temp.insertar_dato(nuevo)
-
-                if valor_dato != "0":
-                    nuevo_SENAL = dato(int(tiempo_dato), int(amplitud_dato), 1)
-                    lista_patronesbin_temp.insertar_dato(nuevo_SENAL)
-                else:
-                    nuevo_SENAL = dato(int(tiempo_dato), int(amplitud_dato), 0)
-                    lista_patronesbin_temp.insertar_dato(nuevo_SENAL)
-            
-            
-            lista_senales_temp.insertar_senal(senal(nombre_senal,tiempo_senal,amplitud_senal,
-                                                    lista_datos_temp,lista_patronesbin_temp,
-                                                    lista_patrones_matrizRed_temp, lista_grupos_temp))
-            #lista_senales_temp.imprimir_lista_senales()
-            #lista_patronesbin_temp.imprimir_lista_datos()
-        lista_senales_temp.calcular_patrones()
-            
-        print("> Calculando la matriz binaria...")
-        print("> Realizando suma de tuplas...")
-        print("... ")
-        print("... ")
-        print("Archivo procesado exitosamente")
+                    if valor_dato == "0":
+                        nuevo_SENAL = dato(int(tiempo_dato), int(amplitud_dato), 0)
+                        lista_patronesbin_temp.insertar_dato(nuevo_SENAL)
+                    else:
+                        nuevo_SENAL = dato(int(tiempo_dato), int(amplitud_dato), 1)
+                        lista_patronesbin_temp.insertar_dato(nuevo_SENAL)
+                
+                
+                lista_senales_temp.insertar_senal(senal(nombre_senal,tiempo_senal,amplitud_senal,
+                                                        lista_datos_temp,lista_patronesbin_temp,
+                                                        lista_patrones_matrizRed_temp, lista_grupos_temp))
+                #lista_senales_temp.imprimir_lista_senales()
+                #lista_patronesbin_temp.imprimir_lista_datos()
+            lista_senales_temp.calcular_patrones()
+                
+            print("> Calculando la matriz binaria...")
+            print("> Realizando suma de tuplas...")
+            print("... ")
+            print("... ")
+            print("Archivo procesado exitosamente")
     except Exception as e:
         print("Ocurrió un error al procesar el archivo:", e)
 
     validacion_opcion()
+
+
+
+
+def archivo_salida():
+    print("------------------------------------------------------------")
+    print("               ESCRIBIR ARCHIVO DE SALIDA                   ")
+    print("------------------------------------------------------------")
+    nombre_archivo = input("Nombre para asignarle al archivo: ")
+    lista_senales_temp.generar_xml_salida(nombre_archivo)
+    print("El archivo se ha escrito con éxito")
+
+    validacion_opcion()
+
+
 
 def generar_Graficas():
     print("------------------------------------------------------------")
@@ -107,7 +115,19 @@ def generar_Graficas():
     print("------------------------------------------------------------")
     nombre = input("Ingrese el nombre de la señal que desea graficar: ")
     lista_senales_temp.grafica_lista_original(nombre)
-    lista_grupos_temp.generar_grafica_reducida(nombre)
+
+
+    validacion_opcion()
+
+def inicializar_sistema():
+    print("------------------------------------------------------------")
+    print("                   INICIALIZAR SISTEMA                      ")
+    print("------------------------------------------------------------")
+    update_source("")
+    lista_senales_temp.__init__()
+    print("Sistema inicializado con éxito")
+
+    validacion_opcion()
 
 def validacion_opcion():
     print("¿Desea regresar al menú?")
@@ -131,7 +151,7 @@ def datos():
     print("> Introducción a la Programación y Computación 2 Sección 'D'")
     print("> Ingeniería en Ciencias y Sistemas")
     print("> 4to Semestre")
-    validacion_opcion
+    validacion_opcion()
 
 def salir():
     print("Gracias por utilizar el programa")
@@ -155,13 +175,13 @@ def menu():
     elif  opcion == 2:
         procesar_archivo()
     elif opcion == 3:
-        print("3")
+        archivo_salida()
     elif opcion == 4:
         datos()
     elif opcion == 5:
         generar_Graficas()
     elif opcion == 6:
-        print("6")
+        inicializar_sistema()
     elif opcion == 7:
         salir()
     else:

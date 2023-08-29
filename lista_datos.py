@@ -9,17 +9,6 @@ class lista_datos:
         self.count_dato = 0
 
 
-    def insertar_dato_1(self, dato):
-        if self.primero is None:
-            self.primero = nodo_dato(dato=dato)
-            self.count_dato +=1
-            return
-        actual = self.primero
-        while actual.siguiente:
-            actual = actual.siguiente
-        actual.siguiente= nodo_dato(dato=dato)
-        self.count_dato +=1
-
     def insertar_dato(self,dato):
         nuevo_dato=nodo_dato(dato=dato)
         self.count_dato+=1
@@ -78,7 +67,6 @@ class lista_datos:
         f.close()
         os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
         os.system('dot -Tpng bb.dot -o GRÁFICA_MATRIZ_ORIGINAL.png')
-        print("terminado")
 
         
 

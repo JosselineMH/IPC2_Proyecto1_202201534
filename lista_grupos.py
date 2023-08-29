@@ -68,4 +68,6 @@ class lista_grupos:
         os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
         os.system('dot -Tpng aa.dot -o grafica_matriz_reducida.png')
 
+        print("Gráfica de la Señal Reducida", nombre_senal, "generada con éxito")
+
     
