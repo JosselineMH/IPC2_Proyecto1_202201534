@@ -12,7 +12,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 source_archivo = ""
 lista_senales_temp = lista_senales()
-
+lista_grupos_temp = lista_grupos()
 
 def update_source(new_source):
     global source_archivo
@@ -66,7 +66,7 @@ def procesar_archivo():
             lista_datos_temp = lista_datos()
             lista_patronesbin_temp = lista_datos()
             lista_patrones_matrizRed_temp = lista_patrones()
-            lista_grupos_temp = lista_grupos()
+            #lista_grupos_temp = lista_grupos()
             
 
             for dato_senal in senal_temp.findall('dato'):
@@ -91,7 +91,11 @@ def procesar_archivo():
             #lista_patronesbin_temp.imprimir_lista_datos()
         lista_senales_temp.calcular_patrones()
             
-        print("Calculando la matriz binaria...")
+        print("> Calculando la matriz binaria...")
+        print("> Realizando suma de tuplas...")
+        print("... ")
+        print("... ")
+        print("Archivo procesado exitosamente")
     except Exception as e:
         print("Ocurrió un error al procesar el archivo:", e)
 
@@ -103,6 +107,7 @@ def generar_Graficas():
     print("------------------------------------------------------------")
     nombre = input("Ingrese el nombre de la señal que desea graficar: ")
     lista_senales_temp.grafica_lista_original(nombre)
+    lista_grupos_temp.generar_grafica_reducida(nombre)
 
 def validacion_opcion():
     print("¿Desea regresar al menú?")

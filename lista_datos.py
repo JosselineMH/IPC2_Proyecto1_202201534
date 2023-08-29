@@ -80,6 +80,8 @@ class lista_datos:
         os.system('dot -Tpng bb.dot -o GRÁFICA_MATRIZ_ORIGINAL.png')
         print("terminado")
 
+        
+
 
     def devolver_patrones_por_tiempo(self, lista_patrones_reducida):
         actual = self.primero

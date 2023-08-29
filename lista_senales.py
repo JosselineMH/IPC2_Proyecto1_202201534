@@ -24,7 +24,7 @@ def procesar_cadena(cadena_grupo):
             subcadenas = []  # Reiniciar subcadenas para la siguiente iteración
             buffer = []  # Reiniciar buffer para la siguiente iteración
             string_suma+= str(suma_total)+"-"
-    print("Realizando suma de tuplas...")
+    #print("Realizando suma de tuplas...")
     return "-".join(suma_total)
 
 
@@ -76,22 +76,7 @@ class lista_senales:
         else:
             print("La señal", nombre, "no existe")
 
-    def grafica_lista_reducida(self, nombre):
-        lista_grupos_temp = lista_grupos()
-        actual=self.primero
-        nombre_coincide=False
-        while actual != None:
-            if actual.senal.nombre==nombre:
-                nombre_coincide=True
-                break
-            else:
-                actual=actual.siguiente
-        if nombre_coincide:
-            print("Gráfica de la Señal Original", nombre, "generada con éxito")
-            actual.senal.lista_grupos.generar_grafica_reducida(lista_grupos_temp.nombre,
-                                                    str(lista_grupos_temp.el_grupo))
-        else:
-            print("La señal", nombre, "no existe")
+    
 
     def calcular_patrones(self):
         actual = self.primero
@@ -99,7 +84,7 @@ class lista_senales:
             nombre_senal = actual.senal.nombre
             amplitud = actual.senal.amplitud
             actual.senal.lista_patron_reducida = actual.senal.lista_patron_binario.devolver_patrones_por_tiempo(actual.senal.lista_patron_reducida)
-            actual.senal.lista_patron_reducida.recorrer_imprimir_patron()
+            #actual.senal.lista_patron_reducida.recorrer_imprimir_patron()
 
             
 
@@ -114,13 +99,13 @@ class lista_senales:
                     buffer+=digito
                 elif digito =="-" and buffer!="":
                     cadena_grupo=actual.senal.lista_datos.devolver_cadena_grupo(buffer)
-                    print("Esto guarda el buffer:", buffer)
+                    #print("Esto guarda el buffer:", buffer)
                     cadena_grupo_reducida = procesar_cadena(cadena_grupo)
                     actual.senal.lista_grupos.insertar_grupo(grupo=grupo(nombre_senal,amplitud,buffer,cadena_grupo,cadena_grupo_reducida))
                     buffer=""
                 else:
                     buffer=""
-            actual.senal.lista_grupos.recorrer_imprimir_grupo()
+            #actual.senal.lista_grupos.recorrer_imprimir_grupo()
             actual = actual.siguiente
 
     
