@@ -2,48 +2,51 @@ from nodo_senal import nodo_senal
 from grupo import grupo
 from lista_grupos import lista_grupos
 import xml.etree.ElementTree as ET
+from lista_simple_enlazada import lista_simple_enlazada
 
 
-def separar_cadena(cadena, separadpr):
-    numeros = []  # Lista para almacenar los números resultantes
+def separar_cadena_reducida(cadena, separador):
+    numeros = lista_simple_enlazada() # Lista para almacenar los números resultantes
     num_actual = ""  # Cadena para construir el número actual
     for caracter in cadena:
-        if caracter == separadpr:
+        if caracter == separador:
             if num_actual:
-                numeros.append(int(num_actual))
+                numeros.agregar(num_actual)
                 num_actual = ""
         else:
             num_actual += caracter
     if num_actual:
-        numeros.append(int(num_actual))
+        numeros.agregar(num_actual)
     return numeros
 
 
 def procesar_cadena(cadena):
     subcadenas = separar_cadena_reducida(cadena,"#")
+    nodo_actual_subcadena = subcadenas.inicio
     suma_total = None
-
-    for subcadena in subcadenas:
-        valor = separar_cadena_reducida(subcadena,"/")
-        
+    while nodo_actual_subcadena:
+        valor = separar_cadena_reducida(nodo_actual_subcadena.dato, "/")
+        valor_actual = valor.inicio
         if suma_total is None:
-            suma_total = valor
+            suma_total = lista_simple_enlazada()
+            while valor_actual:
+                suma_total.agregar(valor_actual.dato)
+                valor_actual = valor_actual.siguiente
         else:
-            for i in range(len(valor)):
-                if valor[i]:
-                    suma_total[i] = str(int(suma_total[i]) + int(valor[i]))
-
-    return "-".join(suma_total)
-
-
-def separar_cadena_reducida(cadena, separador):
-    resultado = []
-    inicio = 0
-    for i, caracter in enumerate(cadena):
-        if caracter == separador:
-            resultado.append(cadena[inicio:i])
-            inicio = i + 1
-    resultado.append(cadena[inicio:])
+            suma = suma_total.inicio
+            while valor_actual:
+                if suma:
+                    suma.dato = str(int(suma.dato) + int(valor_actual.dato))
+                    suma = suma.siguiente
+                    valor_actual = valor_actual.siguiente
+        nodo_actual_subcadena = nodo_actual_subcadena.siguiente
+    resultado = ""
+    nodo_res= suma_total.inicio
+    while nodo_res:
+        resultado += nodo_res.dato
+        if nodo_res.siguiente:
+            resultado += "-"
+        nodo_res = nodo_res.siguiente
     return resultado
 
 
@@ -150,13 +153,15 @@ class lista_senales:
                 #datosGrupo
                 datos_grupo=ET.SubElement(grupo,"datosGrupo")
                 #dato
-                cadena_digitos=separar_cadena(lista_grupo_temp.grupo.cadena_grupo_reducida,"-")
+                cadena_digitos=separar_cadena_reducida(lista_grupo_temp.grupo.cadena_grupo_reducida,"-")
                 contador_amplitud=1
-                for i in cadena_digitos:
+                num_nodo_actual=cadena_digitos.inicio
+                while num_nodo_actual:
                     dato=ET.SubElement(datos_grupo,"dato")
                     dato.set("A",str(contador_amplitud))
+                    dato.text=num_nodo_actual.dato
                     contador_amplitud+=1
-                    dato.text=str(i)
+                    num_nodo_actual=num_nodo_actual.siguiente   
                 lista_grupo_temp=lista_grupo_temp.siguiente
                 contador_amplitud=1
             actual=actual.siguiente

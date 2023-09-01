@@ -1,19 +1,21 @@
 from nodo_grupo import nodo_grupo
 import sys
 import os
+from lista_simple_enlazada import lista_simple_enlazada
 
-def separar_cadena(cadena, delimitador):
-    numeros = []  # números resultantes
-    num_actual = ""  
-    for c in cadena:
-        if c == delimitador:
+
+def separar_cadena(cadena, separador):
+    numeros = lista_simple_enlazada() # Lista para almacenar los números resultantes
+    num_actual = ""  # Cadena para construir el número actual
+    for caracter in cadena:
+        if caracter == separador:
             if num_actual:
-                numeros.append(int(num_actual))
+                numeros.agregar(num_actual)
                 num_actual = ""
         else:
-            num_actual += c
+            num_actual += caracter
     if num_actual:
-        numeros.append(int(num_actual))
+        numeros.agregar(num_actual)
     return numeros
 
 
@@ -56,9 +58,11 @@ class lista_grupos:
             if actual.grupo.nombre_senal == nombre_senal:
                 text+="""<TR>""" 
                 cadena_digitos=separar_cadena(actual.grupo.cadena_grupo_reducida,"-")
+                digito_actual = cadena_digitos.inicio
                 text+="""<TD border="2" bgcolor="deepskyblue2:purple"  gradientangle="315">g="""+str(actual.grupo.el_grupo)+"""</TD>\n"""
-                for i in cadena_digitos:
-                    text+="""<TD border="2" bgcolor="deepskyblue2:purple"  gradientangle="315">"""+str(i)+"""</TD>\n"""
+                while digito_actual:
+                    text+="""<TD border="2" bgcolor="deepskyblue2:purple" gradientangle="315">"""+digito_actual.dato+"""</TD>\n"""
+                    digito_actual=digito_actual.siguiente
                 text+="""</TR>\n"""
             actual = actual.siguiente
         text+="""</TABLE>>];

@@ -46,8 +46,8 @@ def procesar_archivo():
         validacion_opcion()
         return
 
-    try:
-        with open(source_archivo, "r") as archivo:
+    #try:
+    with open(source_archivo, "r") as archivo:
 
             tree = ET.parse(source_archivo)
             raiz = tree.getroot()
@@ -89,8 +89,8 @@ def procesar_archivo():
             print("... ")
             print("... ")
             print("Archivo procesado exitosamente")
-    except Exception as e:
-        print("Ocurrió un error al procesar el archivo:", e)
+    #except Exception as e:
+     #   print("Ocurrió un error al procesar el archivo:", e)
 
     validacion_opcion()
 
